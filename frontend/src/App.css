@@ -1,0 +1,116 @@
+/* src/styles/sidebar.css */
+
+:root {
+    --sidebar-width: 240px;
+    --sidebar-collapsed: 72px;
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+}
+
+* {
+    font-family: Poppins, sans-serif;
+    background-image: radial-gradient(circle 703px at 15.9% 53.4%, rgba(80, 15, 85, 1) 0%, rgba(11, 83, 149, 1) 100.2%);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-right: 1px solid var(--glass-border);
+    transition: width 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed);
+}
+
+.sidebar.expanded {
+    width: var(--sidebar-width);
+}
+
+/* Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* Menu */
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.25s ease;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Center icons when collapsed */
+.sidebar.collapsed .menu-item {
+    justify-content: center;
+}
+
+.icon {
+    font-size: 1.3rem;
+}
+
+.label {
+    white-space: nowrap;
+    animation: fadeIn 0.25s ease;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar.expanded {
+        width: 200px;
+    }
+}
