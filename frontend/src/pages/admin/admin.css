@@ -1,0 +1,209 @@
+/* Admin table */
+.admin-table-wrap {
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.13);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.admin-table th {
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.5);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 11px 16px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: 12px 16px;
+    color: rgba(255,255,255,.82);
+    border-top: 1px solid rgba(255,255,255,.07);
+    vertical-align: middle;
+}
+
+.admin-table tr:hover td { background: rgba(255,255,255,.04); }
+
+/* Role badges */
+.role-badge {
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.role-user      { background: rgba(59,130,246,.18); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+.role-volunteer { background: rgba(34,197,94,.18);  color: #86efac; border: 1px solid rgba(34,197,94,.3); }
+.role-admin     { background: rgba(168,85,247,.18); color: #d8b4fe; border: 1px solid rgba(168,85,247,.3); }
+
+/* Status indicators */
+.status-active   { color: #86efac; font-size: 0.78rem; }
+.status-inactive { color: #fca5a5; font-size: 0.78rem; }
+
+/* Search bar */
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-input {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 10px;
+    padding: 9px 14px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    width: 280px;
+    max-width: 100%;
+}
+
+.search-input::placeholder { color: rgba(255,255,255,.3); }
+.search-input:focus { border-color: rgba(255,255,255,.35); }
+
+/* Action buttons in table */
+.tbl-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btn-xs {
+    padding: 4px 10px;
+    font-size: 0.76rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    border: 1px solid;
+    transition: background 0.18s;
+}
+
+.btn-xs-primary  { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.25); color: white; }
+.btn-xs-danger   { background: rgba(239,68,68,.16);   border-color: rgba(239,68,68,.3);   color: #fca5a5; }
+.btn-xs-success  { background: rgba(34,197,94,.16);   border-color: rgba(34,197,94,.3);   color: #86efac; }
+.btn-xs-warning  { background: rgba(251,191,36,.16);  border-color: rgba(251,191,36,.3);  color: #fde68a; }
+
+.btn-xs-primary:hover  { background: rgba(255,255,255,.24); }
+.btn-xs-danger:hover   { background: rgba(239,68,68,.28); }
+.btn-xs-success:hover  { background: rgba(34,197,94,.28); }
+.btn-xs-warning:hover  { background: rgba(251,191,36,.28); }
+
+/* Select in table */
+.role-select {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: white;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.role-select option { background: #1e1e2f; }
+
+/* Priority badges */
+.priority-low      { background: rgba(59,130,246,.18);  color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+.priority-medium   { background: rgba(251,191,36,.18);  color: #fde68a; border: 1px solid rgba(251,191,36,.3); }
+.priority-high     { background: rgba(239,68,68,.18);   color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+.priority-critical { background: rgba(239,68,68,.35);   color: #ff6b6b; border: 1px solid rgba(239,68,68,.5); font-weight: 700; }
+
+/* Emergency banner */
+.emergency-banner {
+    background: rgba(239,68,68,.22);
+    border: 1px solid rgba(239,68,68,.45);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.emergency-banner-icon { color: #fca5a5; font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+
+.emergency-banner-title {
+    color: #fca5a5;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 0 3px;
+}
+
+.emergency-banner-body {
+    color: rgba(255,255,255,.7);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Broadcast card */
+.broadcast-card {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+}
+
+.broadcast-title {
+    color: white;
+    font-size: 0.97rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+}
+
+.broadcast-body {
+    color: rgba(255,255,255,.65);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0 0 8px;
+}
+
+.broadcast-meta {
+    color: rgba(255,255,255,.35);
+    font-size: 0.78rem;
+}
+
+/* User details section */
+.user-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 640px) {
+    .user-detail-grid { grid-template-columns: 1fr; }
+}
+
+.user-detail-field {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+.user-detail-label {
+    color: rgba(255,255,255,.4);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+}
+
+.user-detail-value {
+    color: rgba(255,255,255,.88);
+    font-size: 0.93rem;
+}
+
+/* Notification type colors */
+.notif-info      { border-left: 3px solid #93c5fd; }
+.notif-success   { border-left: 3px solid #86efac; }
+.notif-warning   { border-left: 3px solid #fde68a; }
+.notif-emergency { border-left: 3px solid #fca5a5; }

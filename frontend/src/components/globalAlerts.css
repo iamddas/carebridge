@@ -1,0 +1,106 @@
+.ga-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+    width: calc(100vw - 40px);
+    pointer-events: none;
+}
+
+.ga-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .6);
+    pointer-events: all;
+    animation: ga-slide-in 0.3s cubic-bezier(.2,.8,.4,1);
+}
+
+.ga-emergency {
+    background: rgba(30, 10, 10, .95);
+    border: 1px solid rgba(239, 68, 68, .6);
+    border-left: 4px solid #ef4444;
+}
+
+.ga-broadcast {
+    background: rgba(14, 14, 35, .95);
+    border: 1px solid rgba(99, 102, 241, .5);
+    border-left: 4px solid #6366f1;
+}
+
+.ga-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.ga-emergency .ga-icon { color: #ef4444; }
+.ga-broadcast .ga-icon { color: #818cf8; }
+
+.ga-body { flex: 1; min-width: 0; }
+
+.ga-title {
+    color: white;
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.ga-message {
+    color: rgba(255, 255, 255, .7);
+    font-size: 0.83rem;
+    line-height: 1.45;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.ga-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+    color: rgba(255, 255, 255, .45);
+    font-size: 0.76rem;
+}
+
+.ga-tag {
+    background: rgba(239, 68, 68, .25);
+    color: #fca5a5;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.ga-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, .45);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    margin-top: 1px;
+}
+
+.ga-close:hover { color: white; }
+
+@keyframes ga-slide-in {
+    from { transform: translateX(110%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}

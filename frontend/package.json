@@ -1,7 +1,7 @@
 {
-  "name": "care-bridge-frontend",
+  "name": "carebridge",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.29.0",
-    "axios": "^1.15.2",
+    "@stomp/stompjs": "^7.3.0",
+    "@tanstack/react-query": "^5.75.0",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^6.22.0"
+    "react-router-dom": "^7.6.0",
+    "react-toastify": "^11.1.0",
+    "reactstrap": "^9.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

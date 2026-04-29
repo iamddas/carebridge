@@ -1,78 +1,62 @@
-import { Routes, Route } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { USER_ROLES } from '../utils/constants';
-import { Layout } from '../components/layout/Layout';
-import { ProtectedRoute } from './ProtectedRoute';
-
-// Pages
-import Login from '../pages/auth/Login';
-import Register from '../pages/auth/Register';
-import OAuthSuccess from '../pages/auth/OAuthSuccess';
-import Dashboard from '../pages/dashboard/Dashboard';
-import RequestList from '../pages/requests/RequestList';
-import RequestDetails from '../pages/requests/RequestDetails';
-import CreateRequest from '../pages/requests/CreateRequest';
-import MyRequests from '../pages/requests/MyRequests';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import ProtectedRoute from '../components/ProtectedRoute';
+import Layout from '../layout/Layout';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import Dashboard from '../pages/Dashboard';
+import RequestList from '../pages/RequestList';
+import RequestDetails from '../pages/RequestDetails';
+import CreateRequest from '../pages/CreateRequest';
+import MyRequests from '../pages/MyRequests';
 import AdminDashboard from '../pages/admin/AdminDashboard';
-import NotFound from '../pages/NotFound';
+import UserManagement from '../pages/admin/UserManagement';
+import UserDetails from '../pages/admin/UserDetails';
+import Broadcast from '../pages/admin/Broadcast';
+import Emergency from '../pages/admin/Emergency';
+import AdminMessages from '../pages/admin/AdminMessages';
+import AdminNotifications from '../pages/admin/AdminNotifications';
+import ChatPage from '../pages/chat/ChatPage';
+import { ROLES } from '../utils/constants';
 
-export const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
+export default function AppRoutes() {
+    return (
+        <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-  return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/oauth-success" element={<OAuthSuccess />} />
+            {/* All authenticated users */}
+            <Route element={<ProtectedRoute />}>
+                <Route element={<Layout />}>
+                    <Route index element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/requests" element={<RequestList />} />
+                    <Route path="/requests/:id" element={<RequestDetails />} />
+                    <Route path="/my-requests" element={<MyRequests />} />
+                    <Route path="/chat" element={<ChatPage />} />
+                </Route>
+            </Route>
 
-      {/* Protected Routes */}
-      <Route
-        path="/*"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Routes>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/requests" element={<RequestList />} />
-                <Route path="/requests/:id" element={<RequestDetails />} />
+            {/* USER and ADMIN only */}
+            <Route element={<ProtectedRoute roles={[ROLES.USER, ROLES.ADMIN]} />}>
+                <Route element={<Layout />}>
+                    <Route path="/requests/new" element={<CreateRequest />} />
+                </Route>
+            </Route>
 
-                <Route
-                  path="/requests/create"
-                  element={
-                    <ProtectedRoute requiredRoles={[USER_ROLES.USER]}>
-                      <CreateRequest />
-                    </ProtectedRoute>
-                  }
-                />
+            {/* ADMIN only */}
+            <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
+                <Route element={<Layout />}>
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/admin/users" element={<UserManagement />} />
+                    <Route path="/admin/users/:id" element={<UserDetails />} />
+                    <Route path="/admin/broadcast" element={<Broadcast />} />
+                    <Route path="/admin/emergency" element={<Emergency />} />
+                    <Route path="/admin/messages" element={<AdminMessages />} />
+                    <Route path="/admin/notifications" element={<AdminNotifications />} />
+                </Route>
+            </Route>
 
-                <Route
-                  path="/my-requests"
-                  element={
-                    <ProtectedRoute requiredRoles={[USER_ROLES.USER]}>
-                      <MyRequests />
-                    </ProtectedRoute>
-                  }
-                />
-
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute requiredRoles={[USER_ROLES.ADMIN]}>
-                      <AdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Catch all */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-};
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+    );
+}

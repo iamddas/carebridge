@@ -1,112 +1,68 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
-import authApi from '../api/auth.api';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getMe } from '../api/authApi';
 
-export const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(() => localStorage.getItem('token'));
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
-  // Initialize auth state from localStorage
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const storedUser = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
+    const login = useCallback((userData, newToken) => {
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', JSON.stringify(userData));
+        setToken(newToken);
+        setUser(userData);
+        setIsAuthenticated(true);
+    }, []);
 
-        if (token && storedUser) {
-          setUser(JSON.parse(storedUser));
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (err) {
-        setError('Failed to initialize authentication');
+    const logout = useCallback(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setToken(null);
+        setUser(null);
         setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+        navigate('/login');
+    }, [navigate]);
 
-    initializeAuth();
-  }, []);
+    const checkAuth = useCallback(async () => {
+        const storedToken = localStorage.getItem('token');
+        if (!storedToken) {
+            setLoading(false);
+            return;
+        }
+        try {
+            const userData = await getMe();
+            setToken(storedToken);
+            setUser(userData);
+            setIsAuthenticated(true);
+        } catch {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setToken(null);
+            setUser(null);
+            setIsAuthenticated(false);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
-  const login = useCallback(async (email, password) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await authApi.login(email, password);
-      const { user: userData, token } = response.data;
+    useEffect(() => {
+        checkAuth();
+    }, [checkAuth]);
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
+    return (
+        <AuthContext.Provider value={{ user, token, isAuthenticated, loading, login, logout, checkAuth }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
 
-      setUser(userData);
-      setIsAuthenticated(true);
-      return { success: true, user: userData };
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Login failed';
-      setError(errorMessage);
-      setIsAuthenticated(false);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const register = useCallback(async (userData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await authApi.register(userData);
-      const { user: newUser, token } = response.data;
-
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(newUser));
-
-      setUser(newUser);
-      setIsAuthenticated(true);
-      return { success: true, user: newUser };
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Registration failed';
-      setError(errorMessage);
-      setIsAuthenticated(false);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const logout = useCallback(async () => {
-    try {
-      await authApi.logout();
-    } catch (err) {
-      console.error('Logout API call failed:', err);
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setUser(null);
-      setIsAuthenticated(false);
-      setError(null);
-    }
-  }, []);
-
-  const value = {
-    user,
-    loading,
-    error,
-    isAuthenticated,
-    login,
-    register,
-    logout,
-    userRole: user?.role || null,
-  };
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (!context) throw new Error('useAuth must be used within AuthProvider');
+    return context;
+}

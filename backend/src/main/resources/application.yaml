@@ -7,21 +7,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
+    open-in-view: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 8080
 
-app:
-  jwt:
-    secret: carebridgesecretkeyforjwttoken12345678901234567890
-    expiration: 86400000  # 24 hours in milliseconds
-
-logging:
-  level:
-    root: INFO
-    com.iamddas.communityhelp: DEBUG
+jwt:
+  secret: Y2FyZWJyaWRnZS1qd3Qtc2VjcmV0LWtleS0yMDI2LXVzZS1hLXN0cm9uZ2VyLWtleS1pbi1wcm9kdWN0aW9u
+  expiration: 86400000

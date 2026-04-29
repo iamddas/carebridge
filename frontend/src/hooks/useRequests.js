@@ -1,73 +1,79 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import requestApi from '../api/request.api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+    getRequests,
+    getRequestById,
+    getMyRequests,
+    getAcceptedByMe,
+    createRequest,
+    updateRequest,
+    deleteRequest,
+    acceptRequest,
+    completeRequest,
+} from '../api/helpRequestApi';
+import { showSuccess } from '../utils/toast';
 
-const REQUESTS_QUERY_KEY = ['requests'];
+const ALL_REQUEST_KEYS = [['requests'], ['my-requests'], ['accepted-by-me']];
 
-export const useRequests = (params = {}) => {
-  return useQuery({
-    queryKey: [...REQUESTS_QUERY_KEY, params],
-    queryFn: () => requestApi.getAll(params),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
+function useRequestMutation(mutationFn, { successMessage, onSuccess, ...rest } = {}) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn,
+        onSuccess: (...args) => {
+            ALL_REQUEST_KEYS.forEach((key) =>
+                queryClient.invalidateQueries({ queryKey: key })
+            );
+            if (successMessage) showSuccess(successMessage);
+            onSuccess?.(...args);
+        },
+        ...rest,
+    });
+}
 
-export const useRequestById = (id) => {
-  return useQuery({
-    queryKey: [...REQUESTS_QUERY_KEY, id],
-    queryFn: () => requestApi.getById(id),
-    staleTime: 5 * 60 * 1000,
-    enabled: !!id,
-  });
-};
+export function useRequests(status) {
+    return useQuery({
+        queryKey: ['requests', status ?? 'ALL'],
+        queryFn: () => getRequests(status === 'ALL' ? null : status),
+    });
+}
 
-export const useMyRequests = (params = {}) => {
-  return useQuery({
-    queryKey: [...REQUESTS_QUERY_KEY, 'my-requests', params],
-    queryFn: () => requestApi.getMyRequests(params),
-    staleTime: 5 * 60 * 1000,
-  });
-};
+export function useRequest(id) {
+    return useQuery({
+        queryKey: ['requests', Number(id)],
+        queryFn: () => getRequestById(id),
+        enabled: !!id,
+    });
+}
 
-export const useCreateRequest = () => {
-  const queryClient = useQueryClient();
+export function useMyRequests() {
+    return useQuery({
+        queryKey: ['my-requests'],
+        queryFn: getMyRequests,
+    });
+}
 
-  return useMutation({
-    mutationFn: (requestData) => requestApi.create(requestData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
-    },
-  });
-};
+export function useAcceptedByMe() {
+    return useQuery({
+        queryKey: ['accepted-by-me'],
+        queryFn: getAcceptedByMe,
+    });
+}
 
-export const useUpdateRequest = () => {
-  const queryClient = useQueryClient();
+export function useCreateRequest(options = {}) {
+    return useRequestMutation(createRequest, { successMessage: 'Request created', ...options });
+}
 
-  return useMutation({
-    mutationFn: ({ id, data }) => requestApi.update(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
-    },
-  });
-};
+export function useUpdateRequest(options = {}) {
+    return useRequestMutation(updateRequest, { successMessage: 'Request updated', ...options });
+}
 
-export const useDeleteRequest = () => {
-  const queryClient = useQueryClient();
+export function useDeleteRequest(options = {}) {
+    return useRequestMutation(deleteRequest, { successMessage: 'Request deleted', ...options });
+}
 
-  return useMutation({
-    mutationFn: (id) => requestApi.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
-    },
-  });
-};
+export function useAcceptRequest(options = {}) {
+    return useRequestMutation(acceptRequest, { successMessage: 'Request accepted', ...options });
+}
 
-export const useUpdateRequestStatus = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, status }) => requestApi.updateStatus(id, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
-    },
-  });
-};
+export function useCompleteRequest(options = {}) {
+    return useRequestMutation(completeRequest, { successMessage: 'Request marked complete', ...options });
+}
