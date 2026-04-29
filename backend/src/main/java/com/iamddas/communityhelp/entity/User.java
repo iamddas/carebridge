@@ -1,90 +1,64 @@
 package com.iamddas.communityhelp.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email", name = "uk_user_email")
+})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "NAME")
+    @NotBlank(message = "Name cannot be blank")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name = "EMAIL")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "PASSWORD")
+    @NotBlank(message = "Password cannot be blank")
+    @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(name = "STATUS")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole role = UserRole.USER;
 
-    @Column(name = "ROLE")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserStatus status = UserStatus.ACTIVE;
 
-    @Column(name = "GEN_DATE")
-    private Timestamp genDate;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HelpRequest> createdRequests;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Timestamp getGenDate() {
-        return genDate;
-    }
-
-    public void setGenDate(Timestamp genDate) {
-        this.genDate = genDate;
-    }
+    @OneToMany(mappedBy = "acceptedBy")
+    private List<HelpRequest> acceptedRequests;
 }
