@@ -1,4 +1,4 @@
-export const CATEGORIES = ['FOOD', 'BLOOD', 'BOOKS', 'OTHER'];
+export const CATEGORIES = ['FOOD', 'BLOOD', 'BOOKS', 'MEDICAL', 'OTHER'];
 
 export const STATUS_FILTERS = ['ALL', 'OPEN', 'ACCEPTED', 'COMPLETED', 'CANCELLED'];
 

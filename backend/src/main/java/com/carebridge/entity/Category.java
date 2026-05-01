@@ -1,5 +1,5 @@
 package com.carebridge.entity;
 
 public enum Category {
-    FOOD, BLOOD, BOOKS, OTHER
+    FOOD, BLOOD, BOOKS, MEDICAL, OTHER
 }

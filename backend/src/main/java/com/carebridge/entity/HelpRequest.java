@@ -23,10 +23,8 @@ public class HelpRequest {
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
     private RequestStatus status = RequestStatus.OPEN;
